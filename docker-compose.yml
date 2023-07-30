@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - prometheus-config:/etc/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+  loki:
+    image: grafana/loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - loki-config:/etc/loki
+    command:
+      - '-config.file=/etc/loki/local-config.yaml'
+      - '-target=local'
+      - '-target=local'
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+volumes:
+  prometheus-config:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=10.32.25.118,nolock,rw,soft,nfsvers=4"
+      device: ":/mnt/prox-pool/Coolnow/docker/prometheus"
+
+  grafana-data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=10.32.25.118,nolock,rw,soft,nfsvers=4"
+      device: ":/mnt/prox-pool/Coolnow/docker/grafana"
+
+  loki-config:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=10.32.25.118,nolock,rw,soft,nfsvers=4"
+      device: ":/mnt/prox-pool/Coolnow/docker/loki"
