@@ -17,17 +17,6 @@ services:
     volumes:
       - grafana-data:/var/lib/grafana
 
-  loki:
-    image: grafana/loki
-    ports:
-      - "3100:3100"
-    volumes:
-      - loki-config:/etc/loki
-    command:
-      - '-config.file=/etc/loki/local-config.yaml'
-      - '-target=local'
-      - '-target=local'
-
 volumes:
   prometheus-config:
     driver: local
@@ -42,10 +31,3 @@ volumes:
       type: nfs
       o: "addr=10.32.25.118,nolock,rw,soft,nfsvers=4"
       device: ":/mnt/prox-pool/Coolnow/docker/grafana"
-
-  loki-config:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: "addr=10.32.25.118,nolock,rw,soft,nfsvers=4"
-      device: ":/mnt/prox-pool/Coolnow/docker/loki"
