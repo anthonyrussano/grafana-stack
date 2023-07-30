@@ -9,9 +9,6 @@ services:
       - prometheus-config:/etc/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
-    deploy:
-      placement:
-        constraints: [node.role == manager]
 
   grafana:
     image: grafana/grafana
@@ -19,9 +16,6 @@ services:
       - "3000:3000"
     volumes:
       - grafana-data:/var/lib/grafana
-    deploy:
-      placement:
-        constraints: [node.role == manager]
 
   loki:
     image: grafana/loki
@@ -33,9 +27,6 @@ services:
       - '-config.file=/etc/loki/local-config.yaml'
       - '-target=local'
       - '-target=local'
-    deploy:
-      placement:
-        constraints: [node.role == manager]
 
 volumes:
   prometheus-config:
