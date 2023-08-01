@@ -9,6 +9,11 @@ services:
       - prometheus-config:/etc/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
+    deploy:
+      placement:
+        constraints: [node.role == manager] # Ensure Prometheus runs only on manager nodes
+    labels:
+      prometheus: 'true' # Add this label to identify the Prometheus service
 
   grafana:
     image: grafana/grafana
